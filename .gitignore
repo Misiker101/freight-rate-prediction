@@ -8,13 +8,20 @@ __pycache__/
 env/
 venv/
 
-data/
+# Ignore everything inside these folders
+/data/*
+/models/*
 
 # Model artifacts
-models/
 *.joblib
 
 # IDE / OS junk
 .DS_Store
 .vscode/
 .idea/
+
+# Do not ignore the .gitkeep files inside them
+!/data/.gitkeep
+!/models/.gitkeep
+!/outputs/.gitkeep
+!/scorer_results/.gitkeep

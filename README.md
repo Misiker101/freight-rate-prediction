@@ -1,4 +1,4 @@
-# Freight Rate Prediction — Solution
+# Freight Rate Prediction - Solution
 
 Predicts freight spot rates (`posted_rate`) for individual loads based on
 lane, distance, weight, equipment type, and market signals.
