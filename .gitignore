@@ -14,6 +14,7 @@ venv/
 
 # Model artifacts
 *.joblib
+*.pkl
 
 # IDE / OS junk
 .DS_Store
@@ -23,5 +24,5 @@ venv/
 # Do not ignore the .gitkeep files inside them
 !/data/.gitkeep
 !/models/.gitkeep
-!/outputs/.gitkeep
+!/report/.gitkeep
 !/scorer_results/.gitkeep
