@@ -9,7 +9,6 @@ env/
 venv/
 
 # Ignore everything inside these folders
-/data/*
 /models/*
 
 # Model artifacts
@@ -22,7 +21,6 @@ venv/
 .idea/
 
 # Do not ignore the .gitkeep files inside them
-!/data/.gitkeep
 !/models/.gitkeep
 !/report/.gitkeep
 !/scorer_results/.gitkeep
