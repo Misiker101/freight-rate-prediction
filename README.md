@@ -33,7 +33,7 @@ cd freight-rate-prediction
 
 python -m pip install -r requirements.txt
 ```
-For convenience I have put the dataset here, so you can run the script right away
+I provided the dataset here so you can run the script right away, which is self-contained and reproducible.
 
 Dataset now into `data/`:
 - `data/train_test.csv`
