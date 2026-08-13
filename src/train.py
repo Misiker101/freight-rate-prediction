@@ -1,40 +1,3 @@
-"""
-Trains the freight rate model on data/train_test.csv using
-HistGradientBoostingRegressor (HGBR) and writes:
-  - models/model.pkl                  fitted HGBR model + fitted lookups
-  - models/model_baseline.pkl         linear regression baseline (report context)
-  - report/metrics.json               baseline + HGBR holdout metrics
-  - report/training_curve.csv         per-round train/holdout MAE
-  - report/training_curve.png         plot of the above
-  - report/feature_importance.csv     permutation importance on the holdout set
-  - report/holdout_predictions.csv    for residual plots in the report
-
-Validation strategy
---------------------
-train_test.csv covers Jan-Oct 2025. The real task is to predict Nov-Dec
-2025 (validation.csv) and then a fixed lane across all of December. That
-is a forecasting problem, not an interpolation problem, so a random
-k-fold split would be misleading here — it would let the model see loads
-from late October right next to loads from early October and report a
-validation score that has no relationship to how well it extrapolates
-two months forward.
-
-Instead we hold out the most recent slice of train_test.csv by date (the
-last 2 months, September-October) as the internal test set, and train on
-everything before that. This mirrors the actual deployment gap between
-train_test.csv and validation.csv and gives a much more honest read on
-generalization to unseen future dates.
-
-Why a manual warm-start loop instead of HGBR's built-in early_stopping
------------------------------------------------------------------------
-HGBR has its own early_stopping option, but it works by randomly carving
-a validation_fraction out of whatever X you hand it — that would
-validate on a random slice of Jan-Aug data, not on the Sep-Oct holdout
-above. So early_stopping is turned off, and instead the Sep-Oct holdout
-is checked every `CHECK_EVERY` rounds via warm_start (each fit() call
-just adds more trees, it doesn't restart) until it stops improving.
-"""
-
 from __future__ import annotations
 
 import json
@@ -64,14 +27,12 @@ REPORT_DIR = ROOT / "report"
 HOLDOUT_START = "2025-09-01"  # last two months held out as the internal test set
 TARGET = "posted_rate"
 
-CHECK_EVERY = 20      # add this many trees between checkpoints
-PATIENCE_CHECKS = 4   # stop if holdout MAE hasn't improved in this many checkpoints
+CHECK_EVERY = 20      # between checkpoints
+PATIENCE_CHECKS = 4   # checkpoint for holdout MAE if it hasn't improved
 MAX_ROUNDS = 1500
 
 HGBR_PARAMS = dict(
-    loss="absolute_error",   # L1 objective: robust to the small cluster of outlier-rate
-                              # loads found during EDA (rare 3-7x rate/mile rows) — matters
-                              # more than squared error would.
+    loss="absolute_error",
     learning_rate=0.05,
     max_leaf_nodes=63,
     min_samples_leaf=30,

@@ -33,14 +33,13 @@ cd freight-rate-prediction
 
 python -m pip install -r requirements.txt
 ```
+For convenience I have put the dataset here, so you can run the script right away
 
-Drop original data files into `data/`:
+Dataset now into `data/`:
 - `data/train_test.csv`
 - `data/validation.csv`
 - `data/validation_predictions_template.csv`
 - `data/december_chart_inputs.csv`
-
-For convenience I have put the dataset here, so you can run the script right away
 
 ```bash
 python src/train.py
@@ -60,11 +59,13 @@ This mimics the real gap between train_test.csv and validation.csv, so the holdo
 
 ## Model choice
 
-I went with scikit-learn's HistGradientBoostingRegressor. Main reasons:
+I went with scikit-learn's HistGradientBoostingRegressor. Gradient Boosted Decision Trees (GBDT) are better over deep neural architectures due to their performance on tabular data with categorical features. 
+
+Reasons:
 - Native categorical support (no one-hot explosion for pickup/delivery/equipment)
 - Handles the mixed feature types well
 - I used loss="absolute_error" because the target has a small cluster of  crazy outlier rates (3-7x normal), and L1 is way more robust to that than squared error
 
 I trained a plain linear regression baseline just to sanity-check that the model is actually doing something useful.
 
-I also trained LightGBM, the two models are statistically tied and have close predictive accuracy, but HGBR's MAE/RMSE is slightly better ($109.83/$635.09 MAE/RMSE compared to LightGBM's $111.25/$635.40 MAE/RMSE). 
+I've also trained & compare LightGBM, the two models are almost identical, statistically tied and have close predictive accuracy, but HGBR's MAE/RMSE is slightly better (`$109.83`/`$635.09` MAE/RMSE compared to LightGBM's `$111.25`/`$635.40` MAE/RMSE). 
