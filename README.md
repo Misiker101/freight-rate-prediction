@@ -1,6 +1,6 @@
 # Freight Rate Prediction - Solution
 
-This is my solution for the freight rate prediction task. The goal is to predict freight spot rates (`posted_rate`) for individual loads based on
+This is my solution for the freight rate prediction task. The goal is to predict freight spot rates (`predicted_rate`) for individual loads based on
 lane, distance, weight, equipment type, and market signals across December 2025.
 
 ## Repo Structure
