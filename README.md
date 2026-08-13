@@ -27,10 +27,13 @@ lane, distance, weight, equipment type, and market signals across December 2025.
 ## Setup
 
 ```bash
+# 1. Download the project
 git clone https://github.com/Misiker101/freight-rate-prediction.git
 
+# 2. Go to project folder
 cd freight-rate-prediction
 
+# 3. Install deps
 python -m pip install -r requirements.txt
 ```
 I provided the dataset here so you can run the script right away, which is self-contained and reproducible.
@@ -42,10 +45,13 @@ Dataset now into `data/`:
 - `data/december_chart_inputs.csv`
 
 ```bash
+# 4. Train the model
 python src/train.py
 
+# 5. Generate predictions
 python src/predict.py
 
+# 6. Run the scorer
 python score.py --predictions validation_predictions.csv --december-predictions data/december_chart_inputs.csv
 ```
 

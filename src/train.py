@@ -65,11 +65,7 @@ def evaluate(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
 
 
 def fit_baseline(X_train, X_holdout, y_train_log, y_holdout_dollars) -> tuple[dict, LinearRegression]:
-    """
-    Plain linear regression on one-hot features. Exists purely as a sanity
-    check number for the report — "is the chosen model meaningfully better
-    than the simplest possible baseline, or just a black box we trust."
-    """
+    
     ohe = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
     cat_train = ohe.fit_transform(X_train[feat.CATEGORICAL_COLUMNS].astype(str))
     cat_holdout = ohe.transform(X_holdout[feat.CATEGORICAL_COLUMNS].astype(str))
