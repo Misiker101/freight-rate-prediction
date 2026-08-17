@@ -14,7 +14,7 @@ def fix_weight_sign(df: pd.DataFrame) -> pd.DataFrame:
 def impute_with_reference(
     df: pd.DataFrame, reference_medians: dict[str, float]
 ) -> pd.DataFrame:
-    """Fill nulls using medians computed on the training split only."""
+    
     df = df.copy()
     for col, median_value in reference_medians.items():
         if col in df.columns:
