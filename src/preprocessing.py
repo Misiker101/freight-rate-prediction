@@ -25,3 +25,17 @@ def impute_with_reference(
 def compute_reference_medians(df: pd.DataFrame, columns: list[str]) -> dict[str, float]:
     return {col: float(df[col].median()) for col in columns if col in df.columns}
 
+
+def clean_dataframe(
+    df: pd.DataFrame,
+    reference_medians: dict[str, float] | None = None,
+) -> tuple[pd.DataFrame, dict[str, float]]:
+    
+    df = df.copy()
+    df = fix_weight_sign(df)
+
+    if reference_medians is None:
+        reference_medians = compute_reference_medians(df, IMPUTE_COLUMNS)
+
+    df = impute_with_reference(df, reference_medians)
+    return df, reference_medians
