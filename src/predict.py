@@ -18,6 +18,19 @@ def load_artifact():
     return joblib.load(MODEL_DIR / "model.pkl")
 
 
+def predict_validation(artifact) -> pd.DataFrame:
+    val_raw = pd.read_csv(DATA_DIR / "validation.csv")
+    val_clean, _ = prep.clean_dataframe(val_raw, reference_medians=artifact["reference_medians"])
+    X_val = feat.build_feature_matrix(
+        val_clean,
+        artifact["city_coords"],
+        artifact["category_levels"],
+        artifact["market_fallback"],
+    )
+    preds = np.expm1(artifact["model"].predict(X_val))
+    preds = np.clip(preds, 1.0, None)  # guard against any non-positive edge case
+    out = pd.DataFrame({"load_id": val_raw["load_id"], "predicted_rate": preds})
+    return out
 
 
 def predict_december(artifact) -> pd.DataFrame:
