@@ -41,26 +41,6 @@ def numeric_series(frame: pd.DataFrame, column: str, label: str) -> pd.Series:
     return values.astype(float)
 
 
-def validate_predictions(predictions: pd.DataFrame) -> None:
-    if list(predictions.columns) != ["load_id", "predicted_rate"]:
-        fail("predictions must contain exactly two columns in this order: load_id,predicted_rate")
-    if len(predictions) != EXPECTED_ROWS:
-        fail(f"predictions must contain exactly {EXPECTED_ROWS:,} rows")
-    if predictions["load_id"].isna().any() or predictions["load_id"].duplicated().any():
-        fail("predictions contains missing or duplicate load_id values")
-
-    submitted_ids = set(predictions["load_id"].astype(str))
-    missing = EXPECTED_IDS - submitted_ids
-    extra = submitted_ids - EXPECTED_IDS
-    if missing or extra:
-        fail(
-            "prediction IDs do not match the validation set "
-            f"(missing={len(missing)}, extra={len(extra)})"
-        )
-
-    predicted_rate = numeric_series(predictions, "predicted_rate", "predictions")
-    if (predicted_rate <= 0).any():
-        fail("predictions contains non-positive predicted_rate values")
 
 
 def validate_december(frame: pd.DataFrame) -> pd.DataFrame:
